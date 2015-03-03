@@ -36,11 +36,15 @@ public class HipChatUtil {
     private String mInput;
     private Handler mHandler;
     private static boolean isDebugEnable;
+    private static int matchCount = 0;
 
     /* public variables and constant */
     public DataContainer mData;
+
+
     public static boolean isMentions, isEmoticons,isLinks;
-    public static final int FULL_DATA = 1;
+    public static final int FULL_DATA      = 1;
+    public static final int NO_MATCH_FOUND = 2;
 
     /* constructor*/
     public HipChatUtil(Handler handler,String input)
@@ -54,7 +58,7 @@ public class HipChatUtil {
         isDebugEnable = false;
     }
 
-    /* ***************** Public methods *********************/
+    /****************** Public methods *********************/
 
     /* print logs if debug mode is enabled */
     public static void debugLog(String logstr){
@@ -74,6 +78,12 @@ public class HipChatUtil {
         getMentions();
         getEmoticons();
         getLinks();
+
+        if(matchCount == 0){
+            Message msg = new Message();
+            msg.what = NO_MATCH_FOUND;
+            mHandler.sendMessage(msg);
+        }
     }
 
     /* *************** Private methods ******************* */
@@ -87,6 +97,7 @@ public class HipChatUtil {
             Matcher m = p.matcher(mInput);
             while (m.find()) {
                 isMentions = true;
+                matchCount ++;
                 String ret = m.group();
                 ret = ret.substring(1,ret.length());
                 mData.addMentions(ret.trim());
@@ -103,6 +114,7 @@ public class HipChatUtil {
         Matcher m = p.matcher(mInput);
         while (m.find()) {
             isEmoticons = true;
+            matchCount ++;
             String ret = m.group();
             ret = ret.substring(1, ret.length() - 1);
             mData.addEmoticons(ret);
@@ -118,6 +130,7 @@ public class HipChatUtil {
         Matcher m = p.matcher(mInput);
         while (m.find()) {
             isLinks = true;
+            matchCount ++;
             String url = m.group();
             String title = getTitleFromPage(url);
             mData.addElement(url,title);

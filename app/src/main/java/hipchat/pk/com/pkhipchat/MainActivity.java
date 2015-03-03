@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
         builder1.setMessage(msg);
         builder1.setTitle(title);
         builder1.setCancelable(false);
-        builder1.setPositiveButton("YES",
+        builder1.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -136,7 +136,6 @@ public class MainActivity extends ActionBarActivity {
             switch (msg.what)
             {
                 case HipChatUtil.FULL_DATA:
-                {
                     Gson gson = new GsonBuilder()
                             .setExclusionStrategies(new DataStrategy())
                             .create();
@@ -145,7 +144,12 @@ public class MainActivity extends ActionBarActivity {
                     output.setText(json);
                     HipChatUtil.debugLog(json);
                     progressBar.setVisibility(View.GONE);
-                }
+                    break;
+                case HipChatUtil.NO_MATCH_FOUND:
+                    AlertDialog.Builder alertBuilder =  createAlertDialog("No Match","No " +
+                            "match emoticons, mentions or url that meets requirement found!");
+                    alertBuilder.create().show();
+                    break;
             }
         }
     }
