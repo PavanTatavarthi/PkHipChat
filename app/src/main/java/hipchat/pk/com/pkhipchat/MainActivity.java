@@ -69,17 +69,17 @@ public class MainActivity extends ActionBarActivity {
 
 
     private AlertDialog.Builder createAlertDialog(String title, String msg){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-        builder1.setMessage(msg);
-        builder1.setTitle(title);
-        builder1.setCancelable(false);
-        builder1.setPositiveButton("Ok",
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage(msg);
+        builder.setTitle(title);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        return builder1;
+        return builder;
     }
 
     /*********** Public override Methods **********/
