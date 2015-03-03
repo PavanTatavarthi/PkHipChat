@@ -59,7 +59,8 @@ public class MainActivity extends ActionBarActivity {
                 if(inputStr != null && inputStr.length() > 0) {
                     new LongOperation(mHandler, inputStr).execute("");
                 } else{
-                    AlertDialog.Builder alertBuilder = createAlertDialog("Invalid input String", "Please verify you input String!");
+                    AlertDialog.Builder alertBuilder = createAlertDialog("Invalid input String",
+                            "Please verify you input String!");
                     AlertDialog dialog = alertBuilder.create();
                     dialog.show();
                 }
