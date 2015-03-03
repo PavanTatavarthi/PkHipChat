@@ -24,7 +24,7 @@ public class HipChatUtil {
     /*
       private constants
      */
-    private final String MENTIONS_REGX = "\\B@[A-Za-z0-9_-]+[\\W]";
+    private final String MENTIONS_REGX = "\\B@[A-Za-z0-9_-]+";
     private final String EMOTICONS_REGX = "[(]+[\\x00-\\x7F]{0,15}[)]";
     private final String URL_REGX = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
     private final String TITLE_REGX = "<title>(.*?)</title>";
@@ -54,6 +54,7 @@ public class HipChatUtil {
         isDebugEnable = false;
     }
 
+    /* ***************** Public methods *********************/
 
     /* print logs if debug mode is enabled */
     public static void debugLog(String logstr){
@@ -74,6 +75,8 @@ public class HipChatUtil {
         getEmoticons();
         getLinks();
     }
+
+    /* *************** Private methods ******************* */
 
     /* To fetch Mentions from input string and
      add it to data container */
@@ -126,7 +129,7 @@ public class HipChatUtil {
     }
 
     /* Fetch title string from input param*/
-    public String getTitle(String response)
+    private String getTitle(String response)
     {
         debugLog("Pattern Match title");
         String title= "";

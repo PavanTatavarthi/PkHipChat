@@ -1,5 +1,8 @@
 package hipchat.pk.com.pkhipchat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private HipChatUtil util;
     private EditText input;
     private EditText output;
+    private Context  mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +43,45 @@ public class MainActivity extends ActionBarActivity {
         input = (EditText) findViewById(R.id.editText3);
         output = (EditText) findViewById(R.id.editText);
         mHandler = new DataHandler();
+        mContext = this;
 
     }
 
+    /******************* Private Methods **********/
+
     /* set button click listener and start processing input string on click event*/
-    public void handleButtonEvent() {
+    private void handleButtonEvent() {
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 String inputStr = input.getText().toString().trim();
-                new LongOperation(mHandler,inputStr).execute("");
+                if(inputStr != null && inputStr.length() > 0) {
+                    new LongOperation(mHandler, inputStr).execute("");
+                } else{
+                    AlertDialog.Builder alertBuilder = createAlertDialog("Invalid input String", "Please verify you input String!");
+                    AlertDialog dialog = alertBuilder.create();
+                    dialog.show();
+                }
             }
     });}
 
+
+    private AlertDialog.Builder createAlertDialog(String title, String msg){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+        builder1.setMessage(msg);
+        builder1.setTitle(title);
+        builder1.setCancelable(false);
+        builder1.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        return builder1;
+    }
+
+    /*********** Public override Methods **********/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         /* Inflate the menu; this adds items to the action bar if it is present.*/
@@ -102,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
 
     /* Used to update UI components after finishing blocking operation
      Runs in main thread*/
-    public class DataHandler extends Handler{
+    private class DataHandler extends Handler{
         public void handleMessage(Message msg) {
             switch (msg.what)
             {
@@ -122,7 +151,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /*Strategy to control output json string based on input string matches*/
-    public class DataStrategy implements ExclusionStrategy {
+    private class DataStrategy implements ExclusionStrategy {
 
         public boolean shouldSkipClass(Class<?> arg0) {
             return false;

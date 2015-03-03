@@ -4,5 +4,7 @@
     <string name="app_name">PkHipChat</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="input_hint">Enter input string</string>
+    <string name="output_hint">Output string</string>
 
 </resources>
