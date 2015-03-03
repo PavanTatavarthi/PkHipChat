@@ -21,19 +21,28 @@ import java.util.regex.Matcher;
  */
 public class HipChatUtil {
 
-    private String mInput;
-    DataContainer mData;
-    Handler mHandler;
-    public static boolean isMentions, isEmoticons,isLinks;
-
+    /*
+      private constants
+     */
     private final String MENTIONS_REGX = "\\B@[A-Za-z0-9_-]+";
-    private final String EMOTICONS_REGX = "[(]+[a-zA-Z\\\\.@\\\\-\\\\']*[)]+";
+    private final String EMOTICONS_REGX = "[(]+[a-zA-Z\\\\.@\\\\-\\\\']*[)]{1,15}";
     private final String URL_REGX = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
     private final String TITLE_REGX = "<title>(.*?)</title>";
-    public static final int FULL_DATA = 1;
-    private final String LOG_TAG = "HipChatUtil";
+    private static final String LOG_TAG = "HipChatUtil";
 
-    // constructor
+    /*
+      private data
+     */
+    private String mInput;
+    private Handler mHandler;
+    private static boolean isDebugEnable;
+
+    /* public variables and constant */
+    public DataContainer mData;
+    public static boolean isMentions, isEmoticons,isLinks;
+    public static final int FULL_DATA = 1;
+
+    /* constructor*/
     public HipChatUtil(Handler handler,String input)
     {
         mInput = input;
@@ -42,16 +51,25 @@ public class HipChatUtil {
         isMentions = false;
         isEmoticons = false;
         isLinks = false;
+        isDebugEnable = false;
     }
 
-    // get method to data container object from util instance
+
+    /* print logs if debug mode is enabled */
+    public static void debugLog(String logstr){
+        if(isDebugEnable)
+        {
+            Log.d(LOG_TAG,logstr);
+        }
+    }
+
+    /*get method to data container object from util instance*/
     public DataContainer getData(){
         return mData;
     }
 
-    // Util method to invoke from main thread
+    /* Util method to invoke from main thread*/
     public void processInput(){
-        String json = "";
         getMentions();
         getEmoticons();
         getLinks();
@@ -59,17 +77,14 @@ public class HipChatUtil {
 
     /* To fetch Mentions from input string and
      add it to data container */
-
     private void getMentions()
     {
-            Log.d(LOG_TAG,"Pattern Match");
+        debugLog("Pattern Match in Mentions");
             Pattern p = Pattern.compile(MENTIONS_REGX);
             Matcher m = p.matcher(mInput);
-            int count = 0;
             while (m.find()) {
                 isMentions = true;
                 String ret = m.group();
-                count ++;
                 ret = ret.substring(1,ret.length());
                 mData.addMentions(ret.trim());
             }
@@ -80,14 +95,12 @@ public class HipChatUtil {
      and add it to data container*/
     private void getEmoticons()
     {
-        Log.d(LOG_TAG,"Pattern Match");
+        debugLog("Pattern Match Emoticons");
         Pattern p = Pattern.compile(EMOTICONS_REGX);
         Matcher m = p.matcher(mInput);
-        int count = 0;
         while (m.find()) {
             isEmoticons = true;
             String ret = m.group();
-            count ++;
             ret = ret.substring(1, ret.length() - 1);
             mData.addEmoticons(ret);
         }
@@ -97,14 +110,12 @@ public class HipChatUtil {
       and add it to data container*/
     private String getLinks()
     {
-        Log.d(LOG_TAG,"Pattern Match");
+        debugLog("Pattern Match Links");
         Pattern p = Pattern.compile(URL_REGX);
         Matcher m = p.matcher(mInput);
-        int count = 0;
         while (m.find()) {
             isLinks = true;
             String url = m.group();
-            count ++;
             String title = getTitleFromPage(url);
             mData.addElement(url,title);
         }
@@ -114,10 +125,10 @@ public class HipChatUtil {
         return null;
     }
 
-    // Fetch title string from input param
+    /* Fetch title string from input param*/
     public String getTitle(String response)
     {
-        Log.d(LOG_TAG,"Pattern Match");
+        debugLog("Pattern Match title");
         String title= "";
         Pattern p = Pattern.compile(TITLE_REGX, Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
         Matcher m = p.matcher(response);
@@ -127,10 +138,9 @@ public class HipChatUtil {
         return title;
     }
 
-    // Extract web page and feed in page data for title match to get title string
-
+    /*Extract web page and feed in page data for title match to get title string*/
     private String getTitleFromPage(String link) {
-        String str = "***";
+        String str = "";
         String title = "";
         try
         {
@@ -149,4 +159,5 @@ public class HipChatUtil {
 
         return title;
     }
+
 }

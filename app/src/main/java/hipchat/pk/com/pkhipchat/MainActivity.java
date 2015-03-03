@@ -3,7 +3,6 @@ package hipchat.pk.com.pkhipchat;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,13 +17,17 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/*
+  Main Activity hold all reference to UI and responsible for its lifecycle
+ */
 public class MainActivity extends ActionBarActivity {
-    EditText input;
-    EditText output;
+
+    /* private variables*/
     private ProgressBar progressBar;
-    private final String LOG_TAG = "HipChatUtil";
-    DataHandler mHandler;
-    HipChatUtil util;
+    private DataHandler mHandler;
+    private HipChatUtil util;
+    private EditText input;
+    private EditText output;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    // set button click listener and start processing input string on click event
+    /* set button click listener and start processing input string on click event*/
     public void handleButtonEvent() {
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -52,19 +55,19 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        /* Inflate the menu; this adds items to the action bar if it is present.*/
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        /* Handle action bar item clicks here. The action bar will
+         automatically handle clicks on the Home/Up button, so long
+         as you specify a parent activity in AndroidManifest.xml.*/
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        /*noinspection SimplifiableIfStatement*/
         if (id == R.id.action_settings) {
             return true;
         }
@@ -72,8 +75,8 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // AyncTask to perform blocking operations
-    // Processing of String, long running network operations
+    /* AyncTask to perform blocking operations
+     Processing of String, long running network operations*/
     private class LongOperation extends AsyncTask<String, Void, String>
     {
 
@@ -97,8 +100,8 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    // Used to update UI components after finishing blocking operation
-    // Runs in main thread
+    /* Used to update UI components after finishing blocking operation
+     Runs in main thread*/
     public class DataHandler extends Handler{
         public void handleMessage(Message msg) {
             switch (msg.what)
@@ -111,14 +114,14 @@ public class MainActivity extends ActionBarActivity {
                     DataContainer data = util.getData();
                     String json = gson.toJson(data);
                     output.setText(json);
-                    Log.d(LOG_TAG,json);
+                    HipChatUtil.debugLog(json);
                     progressBar.setVisibility(View.GONE);
                 }
             }
         }
     }
 
-    // Strategy to control output json string based on input string matches
+    /*Strategy to control output json string based on input string matches*/
     public class DataStrategy implements ExclusionStrategy {
 
         public boolean shouldSkipClass(Class<?> arg0) {

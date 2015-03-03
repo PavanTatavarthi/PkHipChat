@@ -12,27 +12,27 @@ import java.util.List;
  */
 public class DataContainer{
 
-    //members
+    /* private data */
     private List<HashMap> links;
     private List<String> emoticons = new ArrayList<String>();
     private List<String> mentions = new ArrayList<String>();
 
-    // Constructor
+    /* Constructor */
     public  DataContainer(){
         links = new ArrayList<HashMap>();
     }
 
-    // To add emoticons after processing input data
+    /* To add emoticons after processing input data */
     public void addEmoticons(String input){
         emoticons.add(input);
     }
 
-    // To add mentions after processing input data
+    /* To add mentions after processing input data */
     public void addMentions(String input){
         mentions.add(input);
     }
 
-    // To add url links and their respective title string
+    /* To add url links and their respective title string */
     public void addElement(String link,String title){
         HashMap<String, String> map = new HashMap<String,String>();
         map.put("url",link);
