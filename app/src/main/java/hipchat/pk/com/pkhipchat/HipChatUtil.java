@@ -24,10 +24,11 @@ public class HipChatUtil {
     /*
       private constants
      */
-    private final String MENTIONS_REGX = "\\B@[A-Za-z0-9_-]+";
+    private final String MENTIONS_REGX  = "\\B@[A-Za-z0-9_-]+";
     private final String EMOTICONS_REGX = "[(]+[\\x00-\\x7F]{0,15}[)]";
-    private final String URL_REGX = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
-    private final String TITLE_REGX = "<title>(.*?)</title>";
+    private final String URL_REGX       = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+(" +
+                                          "[\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
+    private final String TITLE_REGX     = "<title>(.*?)</title>";
     private static final String LOG_TAG = "HipChatUtil";
 
     /*
